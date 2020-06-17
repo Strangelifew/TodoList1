@@ -1,0 +1,24 @@
+<header ic-include='{"status":"$status"}'>
+    <h1>List of Todos</h1>
+    <form id="todo-form" ic-post-to="/todos">
+        <input id="new-todo" placeholder="Todo" name="todo-title" pattern=".{4,}" required title="> 3 chars" autofocus>
+    </form>
+</header>
+
+<section id="main" ic-include='{"status":"$status"}'>
+        <div>
+             <button id="users")>Users</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Users
+            <input type="text">
+        </div>
+            <br>
+            <br>
+        <div class="parent" id="todo-list">
+            #foreach($todo in $todos)
+            <div class="child">
+                    <label>$todo.title</label>
+
+            </div>
+            #end
+        </div>
+</section>
+

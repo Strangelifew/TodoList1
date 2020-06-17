@@ -1,0 +1,6 @@
+<header ic-include='{"status":"$status"}'>
+    <h1>List of users</h1>
+    <form id="user-form" ic-post-to="/users">
+            <input id="new-user" placeholder="Name" name="user-nsme" pattern=".{4,}" required title="> 3 chars" autofocus>
+    </form>
+</header>

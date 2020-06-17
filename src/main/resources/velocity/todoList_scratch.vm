@@ -1,0 +1,24 @@
+<header ic-include='{"status":"$status"}'>
+    <h1>List of Todos</h1>
+</header>
+
+<section id="main" ic-include='{"status":"$status"}'>
+        <div>
+             <button id="users")>Users</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Users
+            <input type="text">
+        </div>
+            <br>
+            <br>
+        <div class="parent">
+            <div class="child">Todo1
+                <p> John, Peter, Mike</p>
+            </div>
+            <div class="child">Todo2
+                <p> John, Peter, Mike</p>
+            </div>
+            <div class="child">Todo3
+            <p> John, Peter, MikeJr</p>
+            </div>
+        </div>
+</section>
+
