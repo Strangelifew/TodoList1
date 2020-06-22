@@ -47,4 +47,5 @@ public final class TodoDao {
     public static List<Todo> all() {
         return DATA;
     }
+
 }

@@ -7,11 +7,13 @@ public class Todo {
     private String title;
     private String id;
     private Status status;
+    private List<User> users = new ArrayList<>();;
 
-    public Todo(String title, String id, Status status) {
+    public Todo(String title, String id, Status status, List<User> users) {
         this.title = title;
         this.id = id;
         this.status = status;
+        this.users = users;
     }
 
     public String getId() {
@@ -46,8 +48,16 @@ public class Todo {
         return this.status == Status.COMPLETE;
     }
 
+    public List<User>  getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users){
+        this.users=users;
+    }
+
     public static Todo create(String title) {
-        return new Todo(title, UUID.randomUUID().toString(), Status.ACTIVE);
+        return new Todo(title, UUID.randomUUID().toString(), Status.ACTIVE, null);
     }
 
 }

@@ -16,10 +16,19 @@ public class TodoList {
         // Render main UI
         get("/", (req, res) -> renderTodos(req));
 
+        // Render Users
+        get("/users", (req, res) -> renderUsers(req));
+
         // Add new
         post("/todos", (req, res) -> {
             TodoDao.add(Todo.create(req.queryParams("todo-title")));
             return renderTodos(req);
+        });
+
+        // Add new User
+        post("/users/add", (req, res) -> {
+            UserDao.add(User.create(req.queryParams("user-name")));
+            return renderUsers(req);
         });
 
         // Remove all completed
@@ -40,10 +49,22 @@ public class TodoList {
             return renderTodos(req);
         });
 
+        // Remove User by id
+        delete("/users/:id", (req, res) -> {
+            UserDao.remove(req.params("id"));
+            return renderUsers(req);
+        });
+
         // Update by id
         put("/todos/:id", (req, res) -> {
             TodoDao.update(req.params("id"), req.queryParams("todo-title"));
             return renderTodos(req);
+        });
+
+        // Update User by id
+        put("/users/:id", (req, res) -> {
+            UserDao.update(req.params("id"), req.queryParams("user-name"));
+            return renderUsers(req);
         });
 
         // Toggle status by id
@@ -55,10 +76,26 @@ public class TodoList {
         // Edit by id
         get("/todos/:id/edit", (req, res) -> renderEditTodo(req));
 
+        // Edit user by id
+        get("/users/:id/edit", (req, res) -> renderEditUser(req));
+
+    }
+
+    private static String renderUsers(Request req) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("users", UserDao.all());
+        if ("true".equals(req.queryParams("ic-request"))) {
+            return renderTemplate("velocity/UserList.vm", model);
+        }
+        return renderTemplate("velocity/userIndex.vm", model);
     }
 
     private static String renderEditTodo(Request req) {
         return renderTemplate("velocity/editTodo.vm", new HashMap<>(){{ put("todo", TodoDao.find(req.params("id"))); }});
+    }
+
+    private static String renderEditUser(Request req) {
+        return renderTemplate("velocity/editUser.vm", new HashMap<>(){{ put("user", UserDao.find(req.params("id"))); }});
     }
 
     private static String renderTodos(Request req) {

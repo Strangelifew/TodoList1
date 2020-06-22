@@ -1,0 +1,5 @@
+<li class="editing">
+    <form id="edit-form" ic-put-to="/users/$user.id">
+        <input id="todo-edit" ic-get-from="/users" ic-trigger-on="resetEscape" name="user-name" class="edit" value="$user.name" autofocus>
+    </form>
+</li>

@@ -7,7 +7,7 @@
 
 <section id="main" ic-include='{"status":"$status"}'>
         <div>
-             <button id="users")>Users</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Users
+             <a href="/users">Users</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Users
             <input type="text">
         </div>
             <br>
@@ -16,7 +16,6 @@
             #foreach($todo in $todos)
             <div class="child">
                     <label>$todo.title</label>
-
             </div>
             #end
         </div>

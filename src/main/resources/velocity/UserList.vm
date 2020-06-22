@@ -1,6 +1,24 @@
-<header ic-include='{"status":"$status"}'>
+<header>
     <h1>List of users</h1>
-    <form id="user-form" ic-post-to="/users">
-            <input id="new-user" placeholder="Name" name="user-nsme" pattern=".{4,}" required title="> 3 chars" autofocus>
+    <form id="users-form" ic-post-to="/users/add">
+            <input id="new-todo" placeholder="Name" name="user-name" pattern=".{4,}" required title="> 3 chars" autofocus>
     </form>
 </header>
+
+<section id="main">
+        <div>
+             <a href="/">Back to Todos</a>
+        </div>
+        <br>
+        <br>
+        <ul id="todo-list">
+                #foreach($user in $users)
+                    <li>
+                        <div class="view">
+                            <label ic-get-from="/users/$user.id/edit" ic-target="closest li" ic-trigger-on="dblclick" ic-replace-target="true">$user.name</label>
+                             <button class="destroy" ic-delete-from="/users/$user.id"></button>
+                        </div>
+                    </li>
+                #end
+            </ul>
+</section>

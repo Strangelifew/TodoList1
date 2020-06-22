@@ -11,8 +11,8 @@ button {
     font-family: inherit;
     font-weight: inherit;
     color: inherit;
-    -webkit-appearance: none;
-    appearance: none;
+    -webkit-appearance: button;
+    appearance: button;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
     font-smoothing: antialiased;
@@ -108,8 +108,8 @@ button[type="button"] {
 .edit {
          position: relative;
          margin: 0;
-         width: 100px;
-         font-size: 10px;
+         width: 100%;
+         font-size: 18px;
          font-family: inherit;
          font-weight: inherit;
          line-height: 1.4em;
@@ -233,14 +233,14 @@ label[for='toggle-all'] {
 }
 
 #todo-list li .destroy {
-    display: none;
+    bottom: 0px;
+    display: block;
     position: absolute;
-    top: 2px;
-    right: 0;
-    padding: 8px 20px;
-    font-size: 35px;
-    color: #cc9a9a;
-    transition: color 0.2s ease-out;
+    right: 0px;
+    padding: 0px 0px;
+    font-size: 26px;
+    color: #ff0000;
+    transition: color 0.3s ease-out;
 }
 
 #todo-list li .destroy:hover {
@@ -380,7 +380,7 @@ footer:before {
 
 .child {
   background: #fff;
-  margin: 0 auto;
+  margin: 1px 2px auto;
   width: 100px;
   border: 1px double black;
   height: 90px;
