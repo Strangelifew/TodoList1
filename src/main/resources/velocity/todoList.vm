@@ -16,6 +16,10 @@
             #foreach($todo in $todos)
             <div class="child">
                     <label>$todo.title</label>
+                    <br>
+                    <br>
+                    <br>
+                    <a href="/EditTodo">Edit Todo</a>
             </div>
             #end
         </div>
