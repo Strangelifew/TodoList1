@@ -8,6 +8,13 @@ public final class UserDao {
     private static final List<User> DATA = new ArrayList<>();
 
     public static void add(User user) {
+        Iterator<User> i = DATA.iterator();
+        while (i.hasNext()) {
+            User u = i.next();
+            if (u.getName().equals(user.getName())){
+                throw new IllegalArgumentException("User Exist");
+            }
+        }
         DATA.add(user);
     }
 
@@ -16,6 +23,13 @@ public final class UserDao {
     }
 
     public static void update(String id, String title) {
+        Iterator<User> i = DATA.iterator();
+        while (i.hasNext()) {
+            User u = i.next();
+            if (u.getName().equals(title)){
+                throw new IllegalArgumentException("User Exist");
+            }
+        }
         find(id).setName(title);
     }
 

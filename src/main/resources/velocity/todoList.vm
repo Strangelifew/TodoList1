@@ -18,7 +18,7 @@
                     <label>$todo.title</label>
                     <br>
                     <br>
-                    <br>
+                    <label>$todo.UsersString</label>
                     <a href="/EditTodo">Edit Todo</a>
             </div>
             #end

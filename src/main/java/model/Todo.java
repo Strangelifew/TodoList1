@@ -1,6 +1,7 @@
 package model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Todo {
 
@@ -54,6 +55,10 @@ public class Todo {
 
     public void setUsers(List<User> users){
         this.users=users;
+    }
+
+    public String getUsersString() {
+        return users.stream().map(User::getName).collect(Collectors.joining(", "));
     }
 
     public static Todo create(String title) {

@@ -171,7 +171,7 @@ label[for='toggle-all'] {
 #todo-list div {
     position: relative;
     font-size: 18px;
-    border-bottom: 1px solid;
+    border: 1px solid;
 }
 
 #todo-list li:last-child {
