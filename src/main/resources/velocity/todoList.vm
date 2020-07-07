@@ -7,19 +7,19 @@
 
 <section id="main" ic-include='{"status":"$status"}'>
         <div>
-             <a href="/users">Users</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Users
-            <input type="text">
+            <a href="/users">Users</a>
+            <form id="todo-form" ic-put-to="/users/maxTodos">
+                <label>Max Todos</label>
+                <input id="maxTodos" placeholder="$maxTodos" value="$maxTodos" ic-get-from="/" ic-trigger-on="resetEscape" name="maxTodos" autofocus>
+            </form>
         </div>
             <br>
             <br>
         <div class="parent" id="todo-list">
             #foreach($todo in $todos)
             <div class="child">
-                    <label>$todo.title</label>
-                    <br>
-                    <br>
-                    <label>$todo.UsersString</label>
-                    <a href="/EditTodo">Edit Todo</a>
+                    <a href="/todos/$todo.id/edit">$todo.title</a>
+                    <label id="user" value="$todo.assignee">$todo.assignee</label>
             </div>
             #end
         </div>

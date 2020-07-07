@@ -2,6 +2,9 @@
     <h1>List of users</h1>
     <form id="users-form" ic-post-to="/users/add">
             <input id="new-todo" placeholder="Name" name="user-name" pattern=".{4,}" required title="> 3 chars" autofocus>
+            #if($isFailure)
+                <label class="fail">User Exists! WTF!</label>
+            #end
     </form>
 </header>
 

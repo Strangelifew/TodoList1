@@ -141,6 +141,8 @@ label[for='toggle-all'] {
     display: none;
 }
 
+label.fail { color: red; }
+
 #toggle-all {
     position: absolute;
     top: -55px;

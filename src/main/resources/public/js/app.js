@@ -5,7 +5,7 @@ $(document)
         }
     })
     .click(function (e) {
-        if ($('#todo-edit').length > 0 && !$(e.target).is('#todo-edit')) {
+        if ($('#user-edit').length > 0 && !$(e.target).is('#user-edit')) {
             $("#edit-form").trigger('submit');
         }
     });

@@ -1,20 +1,19 @@
 package model;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.UUID;
 
 public class Todo {
 
     private String title;
     private String id;
     private Status status;
-    private List<User> users = new ArrayList<>();;
+    private User assignedUser;
 
-    public Todo(String title, String id, Status status, List<User> users) {
+    public Todo(String title, String id, Status status) {
         this.title = title;
         this.id = id;
         this.status = status;
-        this.users = users;
     }
 
     public String getId() {
@@ -49,20 +48,19 @@ public class Todo {
         return this.status == Status.COMPLETE;
     }
 
-    public List<User>  getUsers() {
-        return users;
+    public String getAssignee() {
+        return getAssignedUser().map(User::getName).orElse("");
     }
 
-    public void setUsers(List<User> users){
-        this.users=users;
+    public Optional<User> getAssignedUser() {
+        return Optional.ofNullable(assignedUser);
     }
 
-    public String getUsersString() {
-        return users.stream().map(User::getName).collect(Collectors.joining(", "));
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
     }
 
     public static Todo create(String title) {
-        return new Todo(title, UUID.randomUUID().toString(), Status.ACTIVE, null);
+        return new Todo(title, UUID.randomUUID().toString(), Status.ACTIVE);
     }
-
 }

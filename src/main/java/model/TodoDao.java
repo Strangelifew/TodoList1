@@ -1,10 +1,13 @@
 package model;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class TodoDao {
-    private TodoDao() {}
+    private TodoDao() {
+    }
 
     private static final List<Todo> DATA = new ArrayList<>();
 
@@ -12,12 +15,12 @@ public final class TodoDao {
         DATA.add(todo);
     }
 
-    public static Todo find(String id) {
-        return DATA.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+    public static Optional<Todo> find(String id) {
+        return DATA.stream().filter(t -> t.getId().equals(id)).findFirst();
     }
 
     public static void update(String id, String title) {
-        find(id).setTitle(title);
+        find(id).ifPresent(todo -> todo.setTitle(title));
     }
 
     public static List<Todo> ofStatus(String statusString) {
@@ -29,15 +32,15 @@ public final class TodoDao {
     }
 
     public static void remove(String id) {
-        DATA.remove(find(id));
+        find(id).ifPresent(DATA::remove);
     }
 
     public static void removeCompleted() {
-        ofStatus(Status.COMPLETE).forEach(t -> TodoDao.remove(t.getId()));
+        ofStatus(Status.COMPLETE).forEach(t -> remove(t.getId()));
     }
 
     public static void toggleStatus(String id) {
-        find(id).toggleStatus();
+        find(id).ifPresent(Todo::toggleStatus);
     }
 
     public static void toggleAll(boolean complete) {
@@ -48,4 +51,9 @@ public final class TodoDao {
         return DATA;
     }
 
+    public static List<Todo> getAssigned(User user) {
+        return DATA.stream()
+                .filter(t -> t.getAssignedUser().map(u -> u.getId().equals(user.getId())).orElse(false))
+                .collect(Collectors.toList());
+    }
 }

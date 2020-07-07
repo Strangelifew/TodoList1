@@ -1,7 +1,12 @@
 import model.*;
-import spark.*;
-import spark.template.velocity.*;
-import java.util.*;
+import spark.ModelAndView;
+import spark.Request;
+import spark.template.velocity.VelocityTemplateEngine;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import static spark.Spark.*;
 
 
@@ -17,7 +22,7 @@ public class TodoList {
         get("/", (req, res) -> renderTodos(req));
 
         // Render Users
-        get("/users", (req, res) -> renderUsers(req));
+        get("/users", (req, res) -> renderUsers(req, true));
 
         // Add new
         post("/todos", (req, res) -> {
@@ -25,11 +30,14 @@ public class TodoList {
             return renderTodos(req);
         });
 
-        // Add new User
-        post("/users/add", (req, res) -> {
-            UserDao.add(User.create(req.queryParams("user-name")));
-            return renderUsers(req);
+        // Set Max Todos
+        put("/users/maxTodos", (req, res) -> {
+            UserDao.setMaxTodos(Integer.parseInt(req.queryParams("maxTodos")));
+            return renderTodos(req);
         });
+
+        // Add new User
+        post("/users/add", (req, res) -> renderUsers(req, UserDao.add(User.create(req.queryParams("user-name")))));
 
         // Remove all completed
         delete("/todos/completed", (req, res) -> {
@@ -52,20 +60,20 @@ public class TodoList {
         // Remove User by id
         delete("/users/:id", (req, res) -> {
             UserDao.remove(req.params("id"));
-            return renderUsers(req);
+            return renderUsers(req, true);
         });
 
         // Update by id
         put("/todos/:id", (req, res) -> {
-            TodoDao.update(req.params("id"), req.queryParams("todo-title"));
+            String id = req.params("id");
+            String userName = req.queryParams("selected-user");
+            TodoDao.update(id, req.queryParams("todo-title"));
+            UserDao.assignTodo(userName, id);
             return renderTodos(req);
         });
 
         // Update User by id
-        put("/users/:id", (req, res) -> {
-            UserDao.update(req.params("id"), req.queryParams("user-name"));
-            return renderUsers(req);
-        });
+        put("/users/:id", (req, res) -> renderUsers(req, UserDao.update(req.params("id"), req.queryParams("user-name"))));
 
         // Toggle status by id
         put("/todos/:id/toggle_status", (req, res) -> {
@@ -81,9 +89,10 @@ public class TodoList {
 
     }
 
-    private static String renderUsers(Request req) {
+    private static String renderUsers(Request req, boolean isSuccess) {
         Map<String, Object> model = new HashMap<>();
         model.put("users", UserDao.all());
+        model.put("isFailure", !isSuccess);
         if ("true".equals(req.queryParams("ic-request"))) {
             return renderTemplate("velocity/UserList.vm", model);
         }
@@ -91,17 +100,31 @@ public class TodoList {
     }
 
     private static String renderEditTodo(Request req) {
-        return renderTemplate("velocity/editTodo.vm", new HashMap<>(){{ put("todo", TodoDao.find(req.params("id"))); }});
+        Map<String, Object> model = new HashMap<>();
+        String id = req.params("id");
+        Todo todo = TodoDao.find(id).orElseThrow(() -> new IllegalStateException("Failed to find todo by id = " + id));
+        model.put("todo", todo);
+        model.put("users", UserDao.all());
+        model.put("free", UserDao.freeUsers());
+        model.put("user-todo", todo.getAssignee());
+        if ("true".equals(req.queryParams("ic-request"))) {
+            return renderTemplate("velocity/editTodo.vm", model);
+        }
+        return renderTemplate("velocity/editTodoIndex.vm", model);
     }
 
     private static String renderEditUser(Request req) {
-        return renderTemplate("velocity/editUser.vm", new HashMap<>(){{ put("user", UserDao.find(req.params("id"))); }});
+        return renderTemplate("velocity/editUser.vm", new HashMap<>() {{
+            put("user", UserDao.find(req.params("id")));
+        }});
     }
 
     private static String renderTodos(Request req) {
         String statusStr = req.queryParams("status");
+        int maxTodos = UserDao.getMaxTodos();
         Map<String, Object> model = new HashMap<>();
         model.put("todos", TodoDao.ofStatus(statusStr));
+        model.put("maxTodos", maxTodos);
         model.put("filter", Optional.ofNullable(statusStr).orElse(""));
         model.put("activeCount", TodoDao.ofStatus(Status.ACTIVE).size());
         model.put("anyCompleteTodos", TodoDao.ofStatus(Status.COMPLETE).size() > 0);
