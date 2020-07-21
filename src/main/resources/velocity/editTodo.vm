@@ -2,6 +2,7 @@
     <input id="todo-edit" placeholder="$todo.title" ic-get-from="/todos/$todo.id/edit" ic-trigger-on="resetEscape" name="todo-title" class="edit" value="$todo.title" autofocus>
     <p>
     <select name="selected-user">
+        <option/>
         #foreach($user in $free)
             <option #if($user.name == $user-todo)selected#end>$user.name</option>
         #end

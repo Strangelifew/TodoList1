@@ -6,22 +6,17 @@ import java.util.UUID;
 public class Todo {
 
     private String title;
-    private String id;
+    private UUID todoId;
     private Status status;
-    private User assignedUser;
+    private UUID userId;
 
-    public Todo(String title, String id, Status status) {
+    public Todo() {
+    }
+
+    public Todo(String title, UUID todoId, Status status) {
         this.title = title;
-        this.id = id;
+        this.todoId = todoId;
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -32,6 +27,26 @@ public class Todo {
         this.title = title;
     }
 
+    public UUID getTodoId() {
+        return todoId;
+    }
+
+    public String getId() {
+        return todoId.toString();
+    }
+
+    public void setTodoId(UUID todoId) {
+        this.todoId = todoId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -40,27 +55,24 @@ public class Todo {
         this.status = status;
     }
 
-    public void toggleStatus() {
-        this.status = isComplete() ? Status.ACTIVE : Status.COMPLETE;
-    }
-
-    public boolean isComplete() {
-        return this.status == Status.COMPLETE;
-    }
-
     public String getAssignee() {
         return getAssignedUser().map(User::getName).orElse("");
     }
 
     public Optional<User> getAssignedUser() {
-        return Optional.ofNullable(assignedUser);
-    }
-
-    public void setAssignedUser(User assignedUser) {
-        this.assignedUser = assignedUser;
+        return Optional.ofNullable(userId).flatMap(UserDao::find);
     }
 
     public static Todo create(String title) {
-        return new Todo(title, UUID.randomUUID().toString(), Status.ACTIVE);
+        return new Todo(title, UUID.randomUUID(), Status.ACTIVE);
     }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "title='" + title + "'" +
+                ", todoId=" + todoId +
+                '}';
+    }
+
 }

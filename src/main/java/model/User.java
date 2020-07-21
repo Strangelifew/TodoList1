@@ -1,23 +1,18 @@
 package model;
 
-import java.util.*;
+import java.util.UUID;
 
 public class User {
 
     private String name;
-    private String id;
+    private UUID userId;
 
-    public User(String name, String id) {
-        this.name= name;
-        this.id = id;
+    public User() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id=id;
+    public User(String name, UUID userId) {
+        this.name = name;
+        this.userId = userId;
     }
 
     public String getName() {
@@ -25,10 +20,30 @@ public class User {
     }
 
     public void setName(String name) {
-        this.name=name;
+        this.name = name;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getId() {
+        return userId.toString();
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public static User create(String name) {
-        return new User(name, UUID.randomUUID().toString());
+        return new User(name, UUID.randomUUID());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + "'" +
+                ", userId=" + userId +
+                '}';
     }
 }

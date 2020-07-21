@@ -6,6 +6,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static spark.Spark.*;
 
@@ -53,13 +54,13 @@ public class TodoList {
 
         // Remove by id
         delete("/todos/:id", (req, res) -> {
-            TodoDao.remove(req.params("id"));
+            TodoDao.remove(UUID.fromString(req.params("id")));
             return renderTodos(req);
         });
 
         // Remove User by id
         delete("/users/:id", (req, res) -> {
-            UserDao.remove(req.params("id"));
+            UserDao.remove(UUID.fromString(req.params("id")));
             return renderUsers(req, true);
         });
 
@@ -67,17 +68,18 @@ public class TodoList {
         put("/todos/:id", (req, res) -> {
             String id = req.params("id");
             String userName = req.queryParams("selected-user");
-            TodoDao.update(id, req.queryParams("todo-title"));
-            UserDao.assignTodo(userName, id);
+            TodoDao.update(UUID.fromString(id), req.queryParams("todo-title"));
+            TodoDao.assign(userName, UUID.fromString(id));
             return renderTodos(req);
         });
 
         // Update User by id
-        put("/users/:id", (req, res) -> renderUsers(req, UserDao.update(req.params("id"), req.queryParams("user-name"))));
+        put("/users/:id", (req, res) ->
+                renderUsers(req, UserDao.update(UUID.fromString(req.params("id")), req.queryParams("user-name"))));
 
         // Toggle status by id
         put("/todos/:id/toggle_status", (req, res) -> {
-            TodoDao.toggleStatus(req.params("id"));
+            TodoDao.toggleStatus(UUID.fromString(req.params("id")));
             return renderTodos(req);
         });
 
@@ -102,7 +104,7 @@ public class TodoList {
     private static String renderEditTodo(Request req) {
         Map<String, Object> model = new HashMap<>();
         String id = req.params("id");
-        Todo todo = TodoDao.find(id).orElseThrow(() -> new IllegalStateException("Failed to find todo by id = " + id));
+        Todo todo = TodoDao.find(UUID.fromString(id)).orElseThrow(() -> new IllegalStateException("Failed to find todo by id = " + id));
         model.put("todo", todo);
         model.put("users", UserDao.all());
         model.put("free", UserDao.freeUsers());
@@ -115,7 +117,9 @@ public class TodoList {
 
     private static String renderEditUser(Request req) {
         return renderTemplate("velocity/editUser.vm", new HashMap<>() {{
-            put("user", UserDao.find(req.params("id")));
+            String id = req.params("id");
+            put("user", UserDao.find(UUID.fromString(id))
+                    .orElseThrow(() -> new IllegalStateException("Can't find user by id = " + id)));
         }});
     }
 
