@@ -2,9 +2,15 @@ plugins {
     id 'java'
 }
 
+//noinspection GroovyUnusedAssignment
+libsDirName = '../src/docker'
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 repositories {
     mavenCentral()
 }
@@ -19,4 +25,11 @@ dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '4.2.3'
     compile group: 'org.liquibase', name: 'liquibase-core', version: '4.0.0'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
+}
+
+jar {
+    manifest { attributes "Main-Class": "TodoList" }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

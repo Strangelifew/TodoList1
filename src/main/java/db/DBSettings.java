@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public interface DBSettings {
     String USER_NAME = "postgres";
-    String PASSWORD = "pass";
-    String URL = "jdbc:postgresql://localhost:5432/tododb";
+    String PASSWORD = "postgres";
+    String URL = "jdbc:postgresql://172.19.0.2:5432/TodoList";
 
     static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER_NAME, PASSWORD);

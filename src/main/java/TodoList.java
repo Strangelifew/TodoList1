@@ -1,8 +1,11 @@
+import db.LiquibaseRunner;
+import liquibase.exception.LiquibaseException;
 import model.*;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +16,8 @@ import static spark.Spark.*;
 
 public class TodoList {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, LiquibaseException {
+        LiquibaseRunner.runLiquibaseUpdate(); // db init
 
         exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
         staticFiles.location("/public");
