@@ -16,8 +16,12 @@ import static spark.Spark.*;
 
 public class TodoList {
 
-    public static void main(String[] args) throws SQLException, LiquibaseException {
-        LiquibaseRunner.runLiquibaseUpdate(); // db init
+    public static void main(String[] args) throws InterruptedException {
+        try {
+            LiquibaseRunner.runLiquibaseUpdate(); // db init
+        } catch (SQLException | LiquibaseException e) {
+            e.printStackTrace();
+        }
 
         exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
         staticFiles.location("/public");
